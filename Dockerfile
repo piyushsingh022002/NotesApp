@@ -4,12 +4,12 @@ WORKDIR /src
 
 # Copy csproj and restore as distinct layers
 COPY *.sln .
-COPY NotesApp.Api/*.csproj ./NotesApp.Api/
+COPY NotesApp/*.csproj ./NotesApp/
 RUN dotnet restore
 
 # Copy everything else and build
 COPY . .
-WORKDIR /src/NotesApp.Api
+WORKDIR /src/NotesApp
 RUN dotnet publish -c Release -o /app/publish
 
 # --- Runtime Stage ---
