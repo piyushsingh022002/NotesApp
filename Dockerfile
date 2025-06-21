@@ -1,20 +1,22 @@
-﻿# Use the official .NET SDK image to build the app
-FROM mcr.microsoft.com / dotnet / sdk:7.0 AS build
-WORKDIR /app
+﻿# --- Build Stage ---
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
 
-# Copy everything
-COPY . ./
-
-# Restore dependencies and build
+# Copy csproj and restore as distinct layers
+COPY *.sln .
+COPY NotesApp.Api/*.csproj ./NotesApp.Api/
 RUN dotnet restore
-RUN dotnet publish -c Release -o out
 
-# Use runtime image to run the app
+# Copy everything else and build
+COPY . .
+WORKDIR /src/NotesApp.Api
+RUN dotnet publish -c Release -o /app/publish
+
+# --- Runtime Stage ---
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
 WORKDIR /app
-COPY --from=build /app/out .
+COPY --from=build /app/publish .
 
-# Tell Docker what port the app will listen on
 ENV ASPNETCORE_URLS=http://+:80
 EXPOSE 80
 
