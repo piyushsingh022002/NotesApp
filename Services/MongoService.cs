@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using Microsoft.Extensions.Configuration;
 
 namespace NotesApp.Api.Services
 {
@@ -6,11 +7,13 @@ namespace NotesApp.Api.Services
     {
         private readonly IMongoDatabase _database;
 
-        public MongoService()
+        public MongoService(IConfiguration configuration)
         {
-            var connectionString = "mongodb+srv://PiyushSingh:KTXbrTvlw4dDXwsp@cluster0.m50rmcy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-            var mongoClient = new MongoClient(connectionString);
-            _database = mongoClient.GetDatabase("notesApp");
+            var connectionString = configuration["MongoDb:ConnectionString"];
+            var dbName = configuration["MongoDb:Database"];
+
+            var client = new MongoClient(connectionString);
+            _database = client.GetDatabase(dbName);
         }
 
         public IMongoCollection<T> GetCollection<T>(string name)
@@ -19,5 +22,3 @@ namespace NotesApp.Api.Services
         }
     }
 }
-
-

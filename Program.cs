@@ -1,7 +1,11 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using NotesApp.Api.Services;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<MongoService>();
 builder.Services.AddControllersWithViews();
+
 
 var app = builder.Build();
 
