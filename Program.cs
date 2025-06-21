@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using NotesApp.Api.Services;
+using System;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,8 @@ builder.Services.AddSingleton<MongoService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<NoteService>();
 
+var mongoConn = builder.Configuration["MongoDb:ConnectionString"] ?? Environment.GetEnvironmentVariable("MongoConnectionString");
+var jwtSecret = builder.Configuration["Jwt:Secret"] ?? Environment.GetEnvironmentVariable("JwtSecret");
 
 // JWT Auth Setup
 var jwtSecret = builder.Configuration["Jwt:Secret"];
