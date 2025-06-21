@@ -9,7 +9,6 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BCrypt.Net;
-using NotesApp.Services;
 
 namespace NotesApp.Api.Controllers
 {

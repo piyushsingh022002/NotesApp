@@ -15,10 +15,10 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.12.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0" />
   </ItemGroup>
-  <ItemGroup>
+ <!-- <ItemGroup>
     <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
-  </ItemGroup>
+  </ItemGroup>-->
 </Project>
