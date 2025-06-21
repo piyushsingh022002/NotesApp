@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 
@@ -27,3 +27,4 @@ namespace NotesApp.Api.Models
         public DateTime UpdatedAt { get; set; }
     }
 }
+

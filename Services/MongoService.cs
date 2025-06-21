@@ -1,4 +1,4 @@
-﻿using MongoDB.Driver;
+using MongoDB.Driver;
 using Microsoft.Extensions.Configuration;
 
 namespace NotesApp.Api.Services
@@ -22,3 +22,4 @@ namespace NotesApp.Api.Services
         }
     }
 }
+
