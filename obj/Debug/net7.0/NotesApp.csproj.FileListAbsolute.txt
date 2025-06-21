@@ -1,0 +1,9 @@
+/Users/piyush/Projects/NotesApp.Api/NotesApp/obj/Debug/net7.0/NotesApp.csproj.AssemblyReference.cache
+/Users/piyush/Projects/NotesApp.Api/NotesApp/obj/Debug/net7.0/NotesApp.GeneratedMSBuildEditorConfig.editorconfig
+/Users/piyush/Projects/NotesApp.Api/NotesApp/obj/Debug/net7.0/NotesApp.AssemblyInfoInputs.cache
+/Users/piyush/Projects/NotesApp.Api/NotesApp/obj/Debug/net7.0/NotesApp.AssemblyInfo.cs
+/Users/piyush/Projects/NotesApp.Api/NotesApp/obj/Debug/net7.0/NotesApp.csproj.CoreCompileInputs.cache
+/Users/piyush/Projects/NotesApp.Api/NotesApp/obj/Debug/net7.0/NotesApp.MvcApplicationPartsAssemblyInfo.cache
+/Users/piyush/Projects/NotesApp.Api/NotesApp/obj/Debug/net7.0/NotesApp.RazorAssemblyInfo.cache
+/Users/piyush/Projects/NotesApp.Api/NotesApp/obj/Debug/net7.0/NotesApp.RazorAssemblyInfo.cs
+/Users/piyush/Projects/NotesApp.Api/NotesApp/obj/Debug/net7.0/NotesApp.sourcelink.json
