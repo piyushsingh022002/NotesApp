@@ -15,7 +15,6 @@ var mongoConn = builder.Configuration["MongoDb:ConnectionString"] ?? Environment
 var jwtSecret = builder.Configuration["Jwt:Secret"] ?? Environment.GetEnvironmentVariable("JwtSecret");
 
 // JWT Auth Setup
-var jwtSecret = builder.Configuration["Jwt:Secret"];
 var key = Encoding.ASCII.GetBytes(jwtSecret);
 
 builder.Services.AddAuthentication(options =>
