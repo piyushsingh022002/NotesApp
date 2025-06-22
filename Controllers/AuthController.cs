@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BCrypt.Net;
+using Internal;
 
 namespace NotesApp.Api.Controllers
 {
@@ -45,41 +46,96 @@ namespace NotesApp.Api.Controllers
             return Ok("User registered successfully.");
         }
 
+        //[HttpPost("login")]
+        //public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        //{
+        //    var user = await _userService.GetByEmailAsync(request.Email);
+        //    if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+        //    {
+        //        return Unauthorized("Invalid email or password.");
+        //    }
+
+        //    var token = GenerateJwtToken(user);
+        //    return Ok(new { token });
+        //}
+
+        //private string GenerateJwtToken(User user)
+        //{
+        //    var jwtSecret = _configuration["Jwt:Secret"];
+        //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
+        //    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        //    var claims = new[]
+        //    {
+        //        new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+        //        new Claim(JwtRegisteredClaimNames.Email, user.Email),
+        //        new Claim("username", user.Username)
+        //    };
+
+        //    var token = new JwtSecurityToken(
+        //        issuer: _configuration["Jwt:Issuer"],
+        //        audience: _configuration["Jwt:Audience"],
+        //        claims: claims,
+        //        expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:ExpiryMinutes"])),
+        //        signingCredentials: creds
+        //    );
+
+        //    return new JwtSecurityTokenHandler().WriteToken(token);
+        //}
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var user = await _userService.GetByEmailAsync(request.Email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+            try
             {
-                return Unauthorized("Invalid email or password.");
-            }
+                var user = await _userService.GetByEmailAsync(request.Email);
+                if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+                {
+                    return Unauthorized("Invalid email or password.");
+                }
 
-            var token = GenerateJwtToken(user);
-            return Ok(new { token });
+                var jwtSecret = _configuration["JwtSecret"];
+                if (string.IsNullOrWhiteSpace(jwtSecret))
+                {
+                    throw new Exception("JWT Secret is missing.");
+                }
+
+                var token = GenerateJwtToken(user, jwtSecret);
+
+                return Ok(new { token });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[LOGIN ERROR] {ex.GetType()}: {ex.Message}");
+                return StatusCode(500, new
+                {
+                    error = ex.GetType().Name,
+                    message = ex.Message
+                });
+            }
         }
 
-        private string GenerateJwtToken(User user)
+        private string GenerateJwtToken(User user, string jwtSecret)
         {
-            var jwtSecret = _configuration["Jwt:Secret"];
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("username", user.Username)
-            };
+        new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+        new Claim(JwtRegisteredClaimNames.Email, user.Email),
+        new Claim("username", user.Username)
+    };
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: _configuration["JwtIssuer"],
+                audience: _configuration["JwtAudience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:ExpiryMinutes"])),
+                expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["JwtExpiryMinutes"])),
                 signingCredentials: creds
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
     }
 }
