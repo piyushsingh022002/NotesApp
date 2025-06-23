@@ -12,9 +12,9 @@ namespace NotesApp.Api.Models
 
         public string? UserId { get; set; } // Set from token on backend
 
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
-        public string Content { get; set; }
+        public string? Content { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
