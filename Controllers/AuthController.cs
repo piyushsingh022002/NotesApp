@@ -27,9 +27,19 @@ namespace NotesApp.Api.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("ping")]
+        //[HttpGet("ping")]
+        //[AllowAnonymous]
+        //public IActionResult Ping() => Ok("pong");
+        [HttpGet("envtest")]
         [AllowAnonymous]
-        public IActionResult Ping() => Ok("pong");
+        public IActionResult EnvTest()
+        {
+            var jwtSecret = _configuration["Jwt:Secret"];
+            if (string.IsNullOrEmpty(jwtSecret))
+                return BadRequest("Jwt:Secret is missing!");
+            return Ok($"Jwt:Secret is {jwtSecret.Length} chars long.");
+        }
+
 
         [HttpPost("register")]
         [AllowAnonymous]
