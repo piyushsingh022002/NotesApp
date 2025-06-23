@@ -64,6 +64,7 @@ namespace NotesApp.Api.Controllers
 
                 var token = GenerateJwtToken(user, jwtSecret);
 
+
                 return Ok(new { token });
             }
             catch (Exception ex)
@@ -96,6 +97,8 @@ namespace NotesApp.Api.Controllers
                 expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["JwtExpiryMinutes"])),
                 signingCredentials: creds
             );
+            Console.WriteLine($"[DEBUG] Issuer: {_configuration["JwtIssuer"]}, Audience: {_configuration["JwtAudience"]}");
+
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
