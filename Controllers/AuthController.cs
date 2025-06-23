@@ -27,6 +27,10 @@ namespace NotesApp.Api.Controllers
             _configuration = configuration;
         }
 
+        [HttpGet("ping")]
+        [AllowAnonymous]
+        public IActionResult Ping() => Ok("pong");
+
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
