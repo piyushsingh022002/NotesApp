@@ -9,12 +9,12 @@ builder.Logging.AddConsole();
 
 
 // Load configuration values
-var jwtSecret = builder.Configuration["JwtSecret"];
-var jwtIssuer = builder.Configuration["JwtIssuer"];
-var jwtAudience = builder.Configuration["JwtAudience"];
-var jwtExpiryMinutes = builder.Configuration["JwtExpiryMinutes"];
-var mongoConnection = builder.Configuration["MongoConnectionString"];
-var mongoDatabase = builder.Configuration["MongoDatabase"];
+var jwtSecret = builder.Configuration["Jwt:Secret"];
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+var jwtAudience = builder.Configuration["Jwt:Audience"];
+var jwtExpiryMinutes = builder.Configuration["Jwt:ExpiryMinutes"];
+var mongoConnection = builder.Configuration["MongoDb:ConnectionString"];
+var mongoDatabase = builder.Configuration["MongoDb:Database"];
 
 // Validate JWT secret
 if (string.IsNullOrWhiteSpace(jwtSecret))
@@ -28,9 +28,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // MongoDB services
+builder.Services.AddSingleton<MongoService>();
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<NoteService>();
-builder.Services.AddSingleton<MongoService>();
+
 
 
 // CORS (allow everything for now — you can tighten later)
