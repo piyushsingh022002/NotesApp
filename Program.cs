@@ -4,6 +4,9 @@ using System.Text;
 using NotesApp.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 
 // Load configuration values
 var jwtSecret = builder.Configuration["JwtSecret"];
