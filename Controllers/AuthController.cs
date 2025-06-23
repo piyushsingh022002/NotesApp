@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BCrypt.Net;
+using Microsoft.AspNetCore.Authorization;
 //using Internal;
 
 namespace NotesApp.Api.Controllers
@@ -27,6 +28,7 @@ namespace NotesApp.Api.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             var existingUser = await _userService.GetByEmailAsync(request.Email);
@@ -46,6 +48,7 @@ namespace NotesApp.Api.Controllers
             return Ok("User registered successfully.");
         }
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             try
