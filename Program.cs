@@ -55,6 +55,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
         };
     });
+Console.WriteLine($"JwtSecret: {jwtSecret?.Length} chars, JwtIssuer: {jwtIssuer}, JwtAudience: {jwtAudience}");
 
 var app = builder.Build();
 
