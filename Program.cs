@@ -30,6 +30,8 @@ builder.Services.AddSwaggerGen();
 // MongoDB services
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<NoteService>();
+builder.Services.AddSingleton<MongoService>();
+
 
 // CORS (allow everything for now — you can tighten later)
 builder.Services.AddCors(options =>
@@ -59,7 +61,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 Console.WriteLine($"JwtSecret: {jwtSecret?.Length} chars, JwtIssuer: {jwtIssuer}, JwtAudience: {jwtAudience}");
-
+try { 
 var app = builder.Build();
 
 // Middleware
@@ -75,3 +77,9 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"[FATAL ERROR] {ex.GetType()}: {ex.Message}");
+    throw;
+}
