@@ -73,7 +73,7 @@ namespace NotesApp.Api.Controllers
                     return Unauthorized("Invalid email or password.");
                 }
 
-                var jwtSecret = _configuration["JwtSecret"];
+                var jwtSecret = _configuration["Jwt:Secret"];
                 if (string.IsNullOrWhiteSpace(jwtSecret))
                 {
                     throw new Exception("JWT Secret is missing.");
@@ -97,28 +97,41 @@ namespace NotesApp.Api.Controllers
 
         private string GenerateJwtToken(User user, string jwtSecret)
         {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            var userId = user.Id ?? throw new InvalidOperationException("User ID is null");
+            var email = user.Email ?? throw new InvalidOperationException("User Email is null");
+            var username = user.Username ?? throw new InvalidOperationException("User Username is null");
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-        new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-        new Claim(JwtRegisteredClaimNames.Email, user.Email),
-        new Claim("username", user.Username)
+        new Claim(JwtRegisteredClaimNames.Sub, userId),
+        new Claim(JwtRegisteredClaimNames.Email, email),
+        new Claim("username", username)
     };
 
+            var issuer = _configuration["Jwt:Issuer"] ?? throw new Exception("Jwt:Issuer is missing");
+            var audience = _configuration["Jwt:Audience"] ?? throw new Exception("Jwt:Audience is missing");
+            var expiryStr = _configuration["Jwt:ExpiryMinutes"] ?? throw new Exception("Jwt:ExpiryMinutes is missing");
+
+            if (!double.TryParse(expiryStr, out var expiryMinutes))
+                throw new Exception("Jwt:ExpiryMinutes must be a valid number");
+
             var token = new JwtSecurityToken(
-                issuer: _configuration["JwtIssuer"],
-                audience: _configuration["JwtAudience"],
+                issuer: issuer,
+                audience: audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["JwtExpiryMinutes"])),
+                expires: DateTime.UtcNow.AddMinutes(expiryMinutes),
                 signingCredentials: creds
             );
-            Console.WriteLine($"[DEBUG] Issuer: {_configuration["JwtIssuer"]}, Audience: {_configuration["JwtAudience"]}");
-
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
 
     }
 }
