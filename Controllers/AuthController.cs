@@ -45,43 +45,6 @@ namespace NotesApp.Api.Controllers
             await _userService.CreateAsync(newUser);
             return Ok("User registered successfully.");
         }
-
-        //[HttpPost("login")]
-        //public async Task<IActionResult> Login([FromBody] LoginRequest request)
-        //{
-        //    var user = await _userService.GetByEmailAsync(request.Email);
-        //    if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-        //    {
-        //        return Unauthorized("Invalid email or password.");
-        //    }
-
-        //    var token = GenerateJwtToken(user);
-        //    return Ok(new { token });
-        //}
-
-        //private string GenerateJwtToken(User user)
-        //{
-        //    var jwtSecret = _configuration["Jwt:Secret"];
-        //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
-        //    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        //    var claims = new[]
-        //    {
-        //        new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-        //        new Claim(JwtRegisteredClaimNames.Email, user.Email),
-        //        new Claim("username", user.Username)
-        //    };
-
-        //    var token = new JwtSecurityToken(
-        //        issuer: _configuration["Jwt:Issuer"],
-        //        audience: _configuration["Jwt:Audience"],
-        //        claims: claims,
-        //        expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:ExpiryMinutes"])),
-        //        signingCredentials: creds
-        //    );
-
-        //    return new JwtSecurityTokenHandler().WriteToken(token);
-        //}
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
